@@ -21,13 +21,24 @@ LEFT OUTER JOIN customers
 ON orders.cid = customers.cid
 ORDER BY totalUSD ASC;
 
--- 4
+-- 4 UPDATED
+SELECT customers.name, SUM(COALESCE(totalUSD, 0))
+FROM customers
+LEFT OUTER JOIN orders
+ON customers.cid = orders.cid
+GROUP BY customers.name -- Fixed. But aren't the two ACMEs technically different companies? 
+						-- c004 & c006 both are named ACME, so I though they should be separated.
+ORDER BY customers.name ASC;
+
+/*
+-- 4 OLD
 SELECT customers.name, SUM(COALESCE(totalUSD, 0))
 FROM customers
 LEFT OUTER JOIN orders
 ON customers.cid = orders.cid
 GROUP BY customers.cid -- How many people grouped by name & combined ACMEs? I almost did...
 ORDER BY customers.name ASC;
+*/
 
 -- 5
 SELECT customers.name as customer, products.name AS product, agents.name AS agent
